@@ -35,6 +35,10 @@ a {
   margin-left: 6px;
 }
 
+a.active {
+  color: #ff4b00;
+}
+
 #root {
   width: 100%;
   overflow-y: auto;
