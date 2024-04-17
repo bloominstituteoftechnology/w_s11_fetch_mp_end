@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 const initialForm = { name: '', breed: '', adopted: false }
 
-export default function DogForm({ dog, setCurrentDogId, postDog, putDog }) {
+export default function DogForm({ dog, reset, getDogs }) {
   const [values, setValues] = useState(initialForm)
   const [breeds, setBreeds] = useState([])
   const navigate = useNavigate()
@@ -20,18 +20,42 @@ export default function DogForm({ dog, setCurrentDogId, postDog, putDog }) {
       .catch(err => console.error(err))
   }, [])
 
-  const onSubmit = (event) => {
-    event.preventDefault()
-    let method = dog ? 'PUT' : 'POST'
-    let url = dog ? `/api/dogs${values.id}` : '/api/dogs'
-    fetch(url, {
-      method,
-      body: JSON.stringify(values),
+  const postDog = (dog) => {
+    fetch('/api/dogs', {
+      method: 'POST',
+      body: JSON.stringify(dog),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
     })
-      .then(() => {
-        navigate('/')
+      .then(res => {
+        if (!res.ok) throw new Error('Problem POSTing dog')
+        else {
+          getDogs()
+          navigate('/')
+        }
       })
       .catch(err => console.error(err))
+  }
+
+  const putDog = (changes) => {
+    fetch(`/api/dogs/${changes.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(changes),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Problem PUTing dog')
+        else {
+          getDogs()
+          navigate('/')
+          reset()
+        }
+      })
+      .catch(err => console.error(err))
+  }
+  const onSubmit = (event) => {
+    event.preventDefault()
+    const action = dog ? putDog : postDog
+    action(values)
   }
 
   const onChange = (event) => {
@@ -72,7 +96,7 @@ export default function DogForm({ dog, setCurrentDogId, postDog, putDog }) {
         <button type="submit" disabled={values.name.trim().length < 3 || !values.breed}>
           {dog ? "Edit Dog" : "Create Dog"}
         </button>
-        {dog && <button onClick={() => setCurrentDogId(null)}>Reset</button>}
+        {dog && <button onClick={reset}>Reset</button>}
       </form>
     </div>
   )

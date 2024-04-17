@@ -5,48 +5,17 @@ import DogsList from './DogsList'
 
 export default function App() {
   const [dogs, setDogs] = useState([])
-  const [currentDogId, setCurrentDogId] = useState(null)
-  useEffect(() => {
-    getDogs()
-  }, [])
+  const [currentDogId, setCurrentDog] = useState(null)
+
+  useEffect(() => { getDogs() }, [])
+
   const getDogs = () => {
     fetch('/api/dogs')
       .then(res => res.json())
       .then(setDogs)
-      .catch(err => console.error(err))
+      .catch(err => console.error('Problem GETing dog', err))
   }
-  const postDog = dog => {
-    fetch('/api/dogs', {
-      method: 'POST',
-      body: JSON.stringify(dog),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Problem POSTing dog')
-      })
-      .catch(err => console.error(err))
-  }
-  const putDog = changes => {
-    fetch('/api/dogs', {
-      method: 'PUT',
-      body: JSON.stringify(changes),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Problem PUTing dog')
-      })
-      .catch(err => console.error(err))
-  }
-  const deleteDog = id => {
-    fetch(`/api/dogs/${id}`, {
-      method: 'DELETE',
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Problem DELETEing dog')
-        else getDogs()
-      })
-      .catch(err => console.error(err))
-  }
+
   return (
     <div>
       <nav>
@@ -56,14 +25,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={<DogsList
           dogs={dogs}
-          deleteDog={deleteDog}
-          setCurrentDogId={setCurrentDogId}
+          setCurrentDog={setCurrentDog}
+          getDogs={getDogs}
         />} />
         <Route path="/form" element={<DogForm
           dog={currentDogId && dogs.find(d => d.id == currentDogId)}
-          setCurrentDogId={setCurrentDogId}
-          postDog={postDog}
-          putDog={putDog}
+          reset={() => setCurrentDog(null)}
+          getDogs={getDogs}
         />} />
       </Routes>
     </div>
