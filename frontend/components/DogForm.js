@@ -7,19 +7,16 @@ export default function DogForm({ dog, reset, getDogs }) {
   const [values, setValues] = useState(initialForm)
   const [breeds, setBreeds] = useState([])
   const navigate = useNavigate()
-
   useEffect(() => {
     if (dog) setValues(dog)
     else setValues(initialForm)
   }, [dog])
-
   useEffect(() => {
     fetch('/api/dogs/breeds')
       .then(res => res.json())
       .then(breeds => setBreeds(breeds))
       .catch(err => console.error(err))
   }, [])
-
   const postDog = (dog) => {
     fetch('/api/dogs', {
       method: 'POST',
@@ -35,7 +32,6 @@ export default function DogForm({ dog, reset, getDogs }) {
       })
       .catch(err => console.error(err))
   }
-
   const putDog = (changes) => {
     fetch(`/api/dogs/${changes.id}`, {
       method: 'PUT',
@@ -52,13 +48,11 @@ export default function DogForm({ dog, reset, getDogs }) {
       })
       .catch(err => console.error(err))
   }
-
   const onSubmit = (event) => {
     event.preventDefault()
     const action = dog ? putDog : postDog
     action(values)
   }
-
   const onChange = (event) => {
     const { name, value, type, checked } = event.target
     setValues({
