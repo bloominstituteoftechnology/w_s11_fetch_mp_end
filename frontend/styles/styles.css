@@ -19,6 +19,16 @@ body {
 h1,
 h2 {
   color: #93005a;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  margin-left: 6px;
 }
 
 #root {
@@ -43,9 +53,19 @@ footer>a {
   color: #ff4b00;
 }
 
-input {
+input, select {
   display: block;
   margin-bottom: 0.5rem;
+  width: 200px;
+}
+
+input[type=checkbox] {
+  display: inline;
+  width: initial;
+}
+
+button[type=submit] {
+  display: block;
 }
 
 form {
