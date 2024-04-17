@@ -12,91 +12,96 @@ server.use(cors())
 
 let id = 1
 const getNextId = () => id++
-let books = [
+const dogBreeds = ['Labrador Retriever', 'German Shepherd', 'Golden Retriever', 'French Bulldog', 'Bulldog']
+let dogs = [
   {
     id: getNextId(),
-    title: "Midnight's Children",
-    author: "Salman Rushdie",
-    finished: false
+    name: "Buddy",
+    breed: "Labrador Retriever",
+    adopted: false
   },
   {
     id: getNextId(),
-    title: "Hyperion",
-    author: "Dan Simmons",
-    finished: true
+    name: "Max",
+    breed: "German Shepherd",
+    adopted: true
   },
   {
     id: getNextId(),
-    title: "The Vampire Lestat",
-    author: "Anne Rice",
-    finished: true
+    name: "Bella",
+    breed: "Golden Retriever",
+    adopted: true
   },
 ]
 
-server.get('/api/books', (_, res) => {
-  res.json(books)
+server.get('/api/dogs/breeds', (_, res) => {
+  res.json(dogBreeds)
 })
 
-server.delete('/api/books/:id', (req, res, next) => {
-  const book = books.find(bk => bk.id == req.params.id)
-  if (!book) {
-    return next({ status: 404, message: 'Book not found' })
+server.get('/api/dogs', (_, res) => {
+  res.json(dogs)
+})
+
+server.delete('/api/dogs/:id', (req, res, next) => {
+  const dog = dogs.find(dg => dg.id == req.params.id)
+  if (!dog) {
+    return next({ status: 404, message: 'Dog not found' })
   }
-  books = books.filter(bk => bk.id != req.params.id)
-  res.json(book)
+  dogs = dogs.filter(dg => dg.id != req.params.id)
+  res.json(dog)
 })
 
 const putSchema = Yup.object().shape({
-  title: Yup.string().nullable().min(3),
-  author: Yup.string().nullable().min(3),
-  finished: Yup.boolean().nullable(),
+  name: Yup.string().nullable().min(3),
+  breed: Yup.string().oneOf(dogBreeds, `Breed must be one of: ${dogBreeds.join(', ')}`).nullable(),
+  adopted: Yup.boolean().nullable(),
 })
   .test(
     'at-least-one-field',
     'Provide properties to update',
     function (obj) {
-      return obj.title != null ||
-        obj.author != null ||
-        obj.finished != null
+      return obj.name != null ||
+        obj.breed != null ||
+        obj.adopted != null
     }
   )
 
-server.put('/api/books/:id', async (req, res, next) => {
-  const book = books.find(bk => bk.id == req.params.id)
-  if (!book) {
-    return next({ status: 404, message: 'Book not found' })
+server.put('/api/dogs/:id', async (req, res, next) => {
+  const dog = dogs.find(dg => dg.id == req.params.id)
+  if (!dog) {
+    return next({ status: 404, message: 'Dog not found' })
   }
   try {
     const {
-      title,
-      author,
-      finished,
+      name,
+      breed,
+      adopted,
     } = await putSchema.validate(req.body, { stripUnknown: true })
-    if (title) book.title = title
-    if (author) book.author = author
-    if (finished != undefined) book.finished = finished
-    res.json(book)
+    if (name) dog.name = name
+    if (breed) dog.breed = breed
+    if (adopted !== undefined) dog.adopted = adopted
+    res.json(dog)
   } catch ({ message }) {
     return next({ status: 422, message })
   }
 })
 
 const postSchema = Yup.object().shape({
-  title: Yup.string().required('`title` required').min(3, 'Title too short'),
-  author: Yup.string().required('`author` required').min(3, 'Author name too short'),
-  finished: Yup.boolean().nullable(),
+  name: Yup.string().required('`name` required').min(3, 'Name too short'),
+  breed: Yup.string().required('`breed` required').oneOf(dogBreeds, `Breed must be one of: ${dogBreeds.join(', ')}`),
+  adopted: Yup.boolean().nullable(),
 })
 
-server.post('/api/books', async (req, res, next) => {
+server.post('/api/dogs', async (req, res, next) => {
   try {
     const {
-      title,
-      author,
-      finished,
+      name,
+      breed,
+      adopted,
     } = await postSchema.validate(req.body, { stripUnknown: true })
-    const newBook = { id: getNextId(), title, author, finished: finished ?? false }
-    books.push(newBook)
-    res.status(201).json(newBook)
+    const newDog = { id: getNextId(), name, breed, adopted: adopted ?? false }
+    dogs.push(newDog)
+    res.status(201).json(newDog)
   } catch ({ message }) {
     return next({ status: 422, message })
   }
@@ -122,5 +127,5 @@ server.use((err, req, res, next) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`listening on ${PORT}`)
+  console.log(`Listening on ${PORT}`)
 })
