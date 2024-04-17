@@ -71,11 +71,13 @@ export default function DogForm({ dog, reset, getDogs }) {
           value={values.name}
           onChange={onChange}
           placeholder="Name"
+          aria-label="Dog's name"
         />
         <select
           name="breed"
           value={values.breed}
           onChange={onChange}
+          aria-label="Dog's breed"
         >
           <option value="">---Select Breed---</option>
           {breeds.map(br => <option key={br}>{br}</option>)}
@@ -86,13 +88,14 @@ export default function DogForm({ dog, reset, getDogs }) {
             name="adopted"
             checked={values.adopted}
             onChange={onChange}
+            aria-label="Is the dog adopted?"
           />
         </label>
         <div>
           <button type="submit" disabled={values.name.trim().length < 3 || !values.breed}>
             {dog ? "Update Dog" : "Create Dog"}
           </button>
-          {dog && <button onClick={reset}>Reset</button>}
+          {dog && <button aria-label="Reset form" onClick={reset}>Reset</button>}
         </div>
       </form>
     </div>
