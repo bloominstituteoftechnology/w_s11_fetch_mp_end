@@ -22,6 +22,10 @@ h2 {
   text-align: center;
 }
 
+h2 {
+  margin-top: 1rem;
+}
+
 nav {
   display: flex;
   justify-content: center;
@@ -64,10 +68,6 @@ input[type=checkbox] {
   width: initial;
 }
 
-button[type=submit] {
-  display: block;
-}
-
 form {
   margin-top: 1rem;
   border: 1px solid gray;
@@ -83,9 +83,13 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 li button {
-  margin-left: 4px;
+  margin-left: 6px;
+}
+
+form button {
+  margin-right: 6px;
 }

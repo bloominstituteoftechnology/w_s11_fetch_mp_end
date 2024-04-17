@@ -52,6 +52,7 @@ export default function DogForm({ dog, reset, getDogs }) {
       })
       .catch(err => console.error(err))
   }
+
   const onSubmit = (event) => {
     event.preventDefault()
     const action = dog ? putDog : postDog
@@ -93,10 +94,12 @@ export default function DogForm({ dog, reset, getDogs }) {
             onChange={onChange}
           />
         </label>
-        <button type="submit" disabled={values.name.trim().length < 3 || !values.breed}>
-          {dog ? "Edit Dog" : "Create Dog"}
-        </button>
-        {dog && <button onClick={reset}>Reset</button>}
+        <div>
+          <button type="submit" disabled={values.name.trim().length < 3 || !values.breed}>
+            {dog ? "Update Dog" : "Create Dog"}
+          </button>
+          {dog && <button onClick={reset}>Reset</button>}
+        </div>
       </form>
     </div>
   )

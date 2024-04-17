@@ -25,13 +25,13 @@ export default function DogsList({ dogs, setCurrentDog, getDogs }) {
       <h2>Dogs Shelter</h2>
       <ul>
         {dogs.map(dog => (
-          <div key={dog.id}>
+          <li key={dog.id}>
             {dog.name}, breed {dog.breed}, {dog.adopted ? ' ' : 'NOT '}adopted
             <div>
               <button onClick={() => editDog(dog.id)}>Edit</button>
               <button onClick={() => deleteDog(dog.id)}>Delete</button>
             </div>
-          </div>
+          </li>
         ))}
       </ul>
     </div>
