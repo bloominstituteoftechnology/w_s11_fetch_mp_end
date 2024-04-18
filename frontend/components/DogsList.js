@@ -13,10 +13,8 @@ export default function DogsList({ dogs, setCurrentDog, getDogs }) {
     })
       .then(res => {
         if (!res.ok) throw new Error('Problem DELETEing dog')
-        else {
-          getDogs()
-          setCurrentDog(null)
-        }
+        getDogs()
+        setCurrentDog(null)
       })
       .catch(err => console.error(err))
   }

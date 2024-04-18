@@ -25,10 +25,8 @@ export default function DogForm({ dog, reset, getDogs }) {
     })
       .then(res => {
         if (!res.ok) throw new Error('Problem POSTing dog')
-        else {
-          getDogs()
-          navigate('/')
-        }
+        getDogs()
+        navigate('/')
       })
       .catch(err => console.error(err))
   }
@@ -40,11 +38,9 @@ export default function DogForm({ dog, reset, getDogs }) {
     })
       .then(res => {
         if (!res.ok) throw new Error('Problem PUTing dog')
-        else {
-          getDogs()
-          navigate('/')
-          reset()
-        }
+        getDogs()
+        navigate('/')
+        reset()
       })
       .catch(err => console.error(err))
   }
