@@ -24,7 +24,7 @@ export default function DogsList({ dogs, setCurrentDog, getDogs }) {
       <ul>
         {dogs.map(dog => (
           <li key={dog.id}>
-            {dog.name}, breed {dog.breed}, {dog.adopted ? ' ' : 'NOT '}adopted
+            {dog.name}, {dog.breed}, {dog.adopted ? ' ' : 'NOT '}adopted
             <div>
               <button onClick={() => editDog(dog.id)}>Edit</button>
               <button onClick={() => deleteDog(dog.id)}>Delete</button>
