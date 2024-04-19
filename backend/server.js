@@ -12,12 +12,12 @@ server.use(cors())
 
 let id = 1
 const getNextId = () => id++
-const dogBreeds = ['Labrador Retriever', 'German Shepherd', 'Golden Retriever', 'French Bulldog', 'Bulldog']
+const dogBreeds = ['Dalmatian', 'German Shepherd', 'Golden Retriever', 'Boxer', 'Bulldog']
 let dogs = [
   {
     id: getNextId(),
     name: "Buddy",
-    breed: "Labrador Retriever",
+    breed: "Dalmatian",
     adopted: false
   },
   {
