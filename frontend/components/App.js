@@ -11,11 +11,13 @@ export default function App() {
 
   const getDogs = () => {
     fetch('/api/dogs')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Problem GETing dogs')
+        return res.json()
+      })
       .then(setDogs)
-      .catch(err => console.error('Problem GETing dog', err))
+      .catch(err => console.error(err))
   }
-
   return (
     <div>
       <nav>
@@ -25,13 +27,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={<DogsList
           dogs={dogs}
-          setCurrentDog={setCurrentDog}
           getDogs={getDogs}
+          setCurrentDog={setCurrentDog}
         />} />
         <Route path="/form" element={<DogForm
           dog={currentDogId && dogs.find(d => d.id == currentDogId)}
-          reset={() => setCurrentDog(null)}
           getDogs={getDogs}
+          reset={() => setCurrentDog(null)}
         />} />
       </Routes>
     </div>

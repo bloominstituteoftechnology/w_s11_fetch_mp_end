@@ -4,24 +4,25 @@ import { useNavigate } from 'react-router-dom'
 const initialForm = { name: '', breed: '', adopted: false }
 
 export default function DogForm({ dog, reset, getDogs }) {
+  const navigate = useNavigate()
   const [values, setValues] = useState(initialForm)
   const [breeds, setBreeds] = useState([])
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (dog) setValues(dog)
-    else setValues(initialForm)
-  }, [dog])
   useEffect(() => {
     fetch('/api/dogs/breeds')
       .then(res => res.json())
       .then(breeds => setBreeds(breeds.toSorted()))
       .catch(err => console.error(err))
   }, [])
-  const postDog = (dog) => {
+  useEffect(() => {
+    if (dog) setValues(dog)
+    else setValues(initialForm)
+  }, [dog])
+  const postDog = () => {
+    console.log('POSTing a new dog!')
     fetch('/api/dogs', {
       method: 'POST',
-      body: JSON.stringify(dog),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(values),
+      headers: new Headers({ 'Content-Type': 'application/json' })
     })
       .then(res => {
         if (!res.ok) throw new Error('Problem POSTing dog')
@@ -30,24 +31,30 @@ export default function DogForm({ dog, reset, getDogs }) {
       })
       .catch(err => console.error(err))
   }
-  const putDog = (changes) => {
-    fetch(`/api/dogs/${changes.id}`, {
+  const putDog = () => {
+    console.log('PUTing an existing dog!')
+    fetch(`/api/dogs/${values.id}`, {
       method: 'PUT',
-      body: JSON.stringify(changes),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(values),
+      headers: new Headers({ 'Content-Type': 'application/json' })
     })
       .then(res => {
         if (!res.ok) throw new Error('Problem PUTing dog')
         getDogs()
-        navigate('/')
         reset()
+        navigate('/')
       })
       .catch(err => console.error(err))
+  }
+  const onReset = (event) => {
+    event.preventDefault()
+    setValues(initialForm)
+    reset()
   }
   const onSubmit = (event) => {
     event.preventDefault()
     const action = dog ? putDog : postDog
-    action(values)
+    action()
   }
   const onChange = (event) => {
     const { name, value, type, checked } = event.target
@@ -55,11 +62,10 @@ export default function DogForm({ dog, reset, getDogs }) {
       ...values, [name]: type === 'checkbox' ? checked : value
     })
   }
-
   return (
     <div>
       <h2>
-        {dog ? "Edit Dog" : "Create Dog "}
+        {dog ? "Update Dog" : "Create Dog"}
       </h2>
       <form onSubmit={onSubmit}>
         <input
@@ -88,10 +94,10 @@ export default function DogForm({ dog, reset, getDogs }) {
           />
         </label>
         <div>
-          <button type="submit" disabled={values.name.trim().length < 3 || !values.breed}>
+          <button type="submit">
             {dog ? "Update Dog" : "Create Dog"}
           </button>
-          {dog && <button aria-label="Reset form" onClick={reset}>Reset</button>}
+          <button onClick={onReset} aria-label="Reset form">Reset</button>
         </div>
       </form>
     </div>
