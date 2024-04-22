@@ -8,6 +8,7 @@ export default function DogsList({ dogs, getDogs, setCurrentDog }) {
     navigate('form')
   }
   const deleteDog = id => {
+    console.log('DELETing an existing dog')
     fetch(`/api/dogs/${id}`, { method: 'DELETE' })
       .then(res => {
         if (!res.ok) throw new Error('Problem DELETing')
