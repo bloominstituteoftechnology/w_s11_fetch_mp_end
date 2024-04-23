@@ -10,7 +10,7 @@ export default function App() {
   useEffect(() => { getDogs() }, [])
 
   const getDogs = () => {
-    fetch('/api/dogs')
+    fetch('https://webapis.bloomtechdev.com/dogs')
       .then(res => {
         if (!res.ok) throw new Error('Problem GETing dogs')
         return res.json()

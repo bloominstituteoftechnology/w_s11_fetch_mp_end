@@ -9,7 +9,7 @@ export default function DogsList({ dogs, getDogs, setCurrentDog }) {
   }
   const deleteDog = id => {
     console.log('DELETing an existing dog')
-    fetch(`/api/dogs/${id}`, { method: 'DELETE' })
+    fetch(`https://webapis.bloomtechdev.com/dogs/${id}`, { method: 'DELETE' })
       .then(res => {
         if (!res.ok) throw new Error('Problem DELETing')
         getDogs()

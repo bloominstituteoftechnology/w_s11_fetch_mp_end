@@ -9,7 +9,7 @@ const domNode = document.getElementById('root')
 const root = createRoot(domNode)
 
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/W_S11_Fetch_Project">
     <App />
   </BrowserRouter>
 )

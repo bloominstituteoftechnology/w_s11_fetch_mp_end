@@ -8,7 +8,7 @@ export default function DogForm({ dog, reset, getDogs }) {
   const [values, setValues] = useState(initialForm)
   const [breeds, setBreeds] = useState([])
   useEffect(() => {
-    fetch('/api/dogs/breeds')
+    fetch('https://webapis.bloomtechdev.com/dogs/breeds')
       .then(res => res.json())
       .then(breeds => setBreeds(breeds.toSorted()))
       .catch(err => console.error(err))
@@ -19,7 +19,7 @@ export default function DogForm({ dog, reset, getDogs }) {
   }, [dog])
   const postDog = () => {
     console.log('POSTing a new dog!')
-    fetch('/api/dogs', {
+    fetch('https://webapis.bloomtechdev.com/dogs', {
       method: 'POST',
       body: JSON.stringify(values),
       headers: new Headers({ 'Content-Type': 'application/json' })
@@ -33,7 +33,7 @@ export default function DogForm({ dog, reset, getDogs }) {
   }
   const putDog = () => {
     console.log('PUTing an existing dog!')
-    fetch(`/api/dogs/${values.id}`, {
+    fetch(`https://webapis.bloomtechdev.com/dogs/${values.id}`, {
       method: 'PUT',
       body: JSON.stringify(values),
       headers: new Headers({ 'Content-Type': 'application/json' })
